@@ -1,24 +1,49 @@
 <template>
   <div
     class="entry-container pointer p-2"
-    @click="$router.push({ name: 'entry', params: { id: 10 } })"
+    @click="$router.push({ name: 'entry', params: { id: entry.id } })"
   >
     <div class="entry-title d-flex">
-      <span class="text-success fs-5 fw-bold">15</span>
-      <span class="mx-1 fs-5">Julio</span>
-      <span class="mx-2 fw-light">2021, Jueves</span>
+      <span class="text-success fs-5 fw-bold">{{ day }}</span>
+      <span class="mx-1 fs-5">{{ month }}</span>
+      <span class="mx-2 fw-light">{{ yearDay }}</span>
     </div>
     <div class="entry-description">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium
-      laboriosam est rerum quas dolore sit saepe iste voluptatibus, corrupti
-      eius nisi magnam illum eligendi assumenda porro repellendus. Maxime,
-      debitis magnam.
+      {{ shortText }}
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import { getDayMonthYear } from "../helpers/getDayMonthYear";
+
+export default {
+  props: {
+    entry: {
+      type: Object,
+      required: true,
+    },
+  },
+  computed: {
+    shortText() {
+      return this.entry.text.length > 100
+        ? this.entry.text.substring(1, 99) + "..."
+        : this.entry.text;
+    },
+    day() {
+      const { day } = getDayMonthYear(this.entry.date);
+      return day;
+    },
+    month() {
+      const { month } = getDayMonthYear(this.entry.date);
+      return month;
+    },
+    yearDay() {
+      const { yearDay } = getDayMonthYear(this.entry.date);
+      return yearDay;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
